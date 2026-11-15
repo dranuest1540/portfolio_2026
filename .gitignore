@@ -15,7 +15,8 @@ vendor/
 # Abaikan file log
 *.log
 
-# Abaikan file dotenv
-*.env
+# Abaikan file dotenv, kecuali template tanpa rahasia
+.env*
+!.env.example
 .vercel
 *.mkv

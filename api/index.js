@@ -2,19 +2,23 @@ import express from 'express';
 import hbs from 'hbs';
 import pool from '../src/config/database.js';
 import path from 'path';
-import fs from 'fs';
 import moment from 'moment';
 import flash from 'express-flash';
 import session from 'express-session';
 import {guest, auth} from "../src/middleware/auth.js";
 import serverless from "serverless-http";
+import bcrypt from "bcryptjs";
 import { fileURLToPath } from 'url';
 import pgConnect from 'connect-pg-simple';
 import { uploadExperience, uploadProject } from "../src/config/cloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
 
 const app = express()
-const port = process.env.PORT || 3000
+const sessionSecret = process.env.SESSION_SECRET;
+
+if (!sessionSecret) {
+    throw new Error("SESSION_SECRET must be set in the environment");
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +26,7 @@ const PgSession = pgConnect(session);
 
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '../src/views')); // versi vercel
+app.set('trust proxy', 1);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -33,11 +38,12 @@ app.use(session({ // Sesi login di server
         tableName: 'session',   // nama table session
         createTableIfMissing: true
     }),
-    secret: 'secretSession',     // ganti dengan secret random kamu
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        maxAge: 24 * 60 * 60 * 1000 // 1 hari
+        maxAge: 24 * 60 * 60 * 1000, // 1 hari
+        secure: process.env.NODE_ENV === 'production',
     }
 }));
 app.use(flash()); 
@@ -80,6 +86,7 @@ app.get('/', async (req, res) => {
         title: "Danu Prastyo",
         css: "/assets/css/style.css",
         js: "/assets/js/script.js",
+        swiper: true,
         experience: experienceResult.rows,
         project: projectResult.rows,
     });
@@ -106,7 +113,7 @@ app.post('/login/auth', guest, async (req, res) => {
 
     try {
         const result = await pool.query(
-            `SELECT * FROM public.user WHERE email = $1`,
+            `SELECT id, name, email, password_hash FROM app_user WHERE email = $1`,
             [email]
         );
 
@@ -117,8 +124,8 @@ app.post('/login/auth', guest, async (req, res) => {
 
         const user = result.rows[0];
 
-        // Ganti bcrypt.compare dengan perbandingan langsung
-        if (password !== user.password) {
+        const passwordMatches = await bcrypt.compare(password, user.password_hash);
+        if (!passwordMatches) {
             req.flash('error', 'Password salah');
             return res.redirect('/login');
         }

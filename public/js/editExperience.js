@@ -7,7 +7,6 @@ document.getElementById("inputImage").addEventListener("change", function (e) {
         const reader = new FileReader();
         reader.onload = function (e) {
             preview.src = e.target.result;
-            arrowIcon.src = e.target.result;
             preview.style.display = "block";
             arrowIcon.classList.remove("d-none");
             arrowIcon.classList.add("d-block");

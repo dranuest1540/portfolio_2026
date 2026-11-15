@@ -1,13 +1,19 @@
-<section class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-	<div class="col-md-5 col-sm-7">
-		<h2 class="text-center fw-bold mb-4">
+<section class="form-page manage-page">
+	<div class="manage-container">
+		<a href="/" class="manage-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to portfolio</a>
+		<div class="manage-panel">
+			<header class="form-heading">
+				<p class="eyebrow">PORTFOLIO MANAGEMENT</p>
+				<h1 class="form-title">
 			{{#if project}}
-				EDIT PROJECT
+				Edit project
 			{{else}}
-				ADD PROJECT
-			{{/if}}			
-		</h2>
-		<form action="{{#if project}}/formProject/update/{{project.id}}{{else}}/formProject/store{{/if}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+				Add project
+			{{/if}}
+				</h1>
+				<p class="form-intro">Share the problem, your approach, and the technology behind the work.</p>
+			</header>
+		<form action="{{#if project}}/formProject/update/{{project.id}}{{else}}/formProject/store{{/if}}" method="POST" enctype="multipart/form-data" class="manage-form needs-validation" novalidate>
 			{{!-- INPUT TITLE --}}
 			<div class="mb-3">
 				<label for="inputTitle" class="form-label fw-medium">Title</label>
@@ -27,13 +33,13 @@
 			{{!-- INPUT TECHNOLOGIES --}}
 			<div class="mb-3">
 				<label class="form-label fw-medium">Technologies</label>
-				<div class="row mx-1">
+				<div class="row mx-1 technology-grid">
 					<div class="form-check col-lg-4">
 						<input class="form-check-input border shadow" type="checkbox" value="Node.js" id="Node.js" name="tech_stack"
 						{{#if (includes (splitTech project.tech_stack) "Node.js")}}
                             checked
                         {{/if}}>
-						<label class="form-check-label" for="Node">Node.js</label>
+						<label class="form-check-label" for="Node.js">Node.js</label>
 					</div>
 					<div class="form-check col-lg-4">
 						<input class="form-check-input border shadow" type="checkbox" value="Bootstrap" id="Bootstrap" name="tech_stack"
@@ -111,14 +117,20 @@
 				</div>
 			</div>
 			{{!-- INPUT IMAGE --}}
-            <div class="d-flex justify-content-between">
+            <div class="image-preview-row {{#if project.project_image}}image-preview-pair{{else}}image-preview-single{{/if}}">
 				{{#if project.project_image}}
-					<img src="{{project.project_image}}" class="mb-3 img-fluid rounded" style="max-height:200px;">
+					<div class="image-preview-card">
+						<span>Current image</span>
+						<img src="{{project.project_image}}" class="mb-3 img-fluid rounded" alt="Current project image">
+					</div>
 				{{/if}}
-				<span id="arrow-icon" class="fs-4 d-flex align-items-center d-none">
+				<span id="arrow-icon" class="image-preview-arrow d-none">
 					<i class="fa-solid fa-angles-right"></i>
 				</span>
-				<img id="preview" class="mb-3 img-fluid rounded" style="display:none; max-height:200px;">
+				<div class="image-preview-card">
+					<span>New image preview</span>
+					<img id="preview" class="mb-3 img-fluid rounded" alt="Preview of selected project image" style="display:none;">
+				</div>
 			</div>
             <div class="mb-3">
 				<label for="inputImage" class="form-label fw-medium">Project Image</label>
@@ -168,12 +180,13 @@
 				</div>
 			</div>
 
-            <div class="d-flex justify-content-between my-5">
-                <a href="/" class="btn btn-dark">Back</a>
-				<button type="submit" class="btn btn-success">
+            <div class="form-actions">
+                <a href="/" class="button button-secondary">Cancel</a>
+				<button type="submit" class="button button-primary">
 					{{#if project}}Update{{else}}Submit{{/if}}
 				</button>
             </div>
 		</form>
+		</div>
 	</div>
 </section>

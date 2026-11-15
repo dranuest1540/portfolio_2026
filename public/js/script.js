@@ -1,35 +1,60 @@
-// Typed JS
-const typed = new Typed('#multiple-text', {
-    strings: ['Full-Stack Developer', 'Content-Creator', 'Mobile Developer'],
-    typeSpeed: 50,
-    backSpeed: 100,
-    backDelay: 1000,
-    loop: true
+document.querySelectorAll(".site-nav .nav-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    const navigation = document.querySelector("#mainNavigation");
+    if (navigation?.classList.contains("show") && window.bootstrap) {
+      window.bootstrap.Collapse.getOrCreateInstance(navigation).hide();
+    }
+  });
 });
 
-// Swiper JS
-document.addEventListener('DOMContentLoaded', function () {
-    const swiper = new Swiper('.tech-swiper', {
-        slidesPerView: 'auto',
-        spaceBetween: 30,
-        loop: true,
-        allowTouchMove: true,
-        speed: 3000,
-        autoplay: {
-            delay: 0,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-            reverseDirection: false,
+document.querySelectorAll("[data-password-toggle]").forEach((toggle) => {
+  const input = document.getElementById(toggle.dataset.passwordToggle);
+  const icon = toggle.querySelector("i");
+
+  if (!input || !icon) {
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    const showPassword = input.type === "password";
+    input.type = showPassword ? "text" : "password";
+    toggle.setAttribute("aria-pressed", String(showPassword));
+    toggle.setAttribute(
+      "aria-label",
+      showPassword ? "Hide password" : "Show password",
+    );
+    icon.classList.toggle("fa-eye", !showPassword);
+    icon.classList.toggle("fa-eye-slash", showPassword);
+  });
+});
+
+const techSwiperElement = document.querySelector(".tech-swiper");
+
+if (techSwiperElement && window.Swiper) {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  new window.Swiper(techSwiperElement, {
+    slidesPerView: "auto",
+    spaceBetween: 10,
+    loop: true,
+    speed: 4000,
+    grabCursor: true,
+    freeMode: {
+      enabled: true,
+      momentum: false,
+    },
+    keyboard: {
+      enabled: true,
+      onlyInViewport: true,
+    },
+    autoplay: prefersReducedMotion
+      ? false
+      : {
+          delay: 0,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: false,
         },
-        on: {
-            beforeInit: function () {
-                const slides = this.el.querySelectorAll('.swiper-slide');
-                slides.forEach(slide => {
-                    this.el.querySelector('.swiper-wrapper').appendChild(slide.cloneNode(true));
-                });
-            }
-        }
-    });
-
-    swiper.autoplay.start();
-});
+  });
+}
