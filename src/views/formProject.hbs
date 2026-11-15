@@ -70,11 +70,39 @@
 						<label class="form-check-label" for="Express.js">Express.js</label>
 					</div>
 					<div class="form-check col-lg-4">
+						<input class="form-check-input border shadow" type="checkbox" value="React" id="React" name="tech_stack"
+						{{#if (includes (splitTech project.tech_stack) "React")}}
+                            checked
+                        {{/if}}>
+						<label class="form-check-label" for="React">React</label>
+					</div>
+					<div class="form-check col-lg-4">
+						<input class="form-check-input border shadow" type="checkbox" value="Docker" id="Docker" name="tech_stack"
+						{{#if (includes (splitTech project.tech_stack) "Docker")}}
+                            checked
+                        {{/if}}>
+						<label class="form-check-label" for="Docker">Docker</label>
+					</div>
+					<div class="form-check col-lg-4">
 						<input class="form-check-input border shadow" type="checkbox" value="Flutter" id="Flutter" name="tech_stack"
 						{{#if (includes (splitTech project.tech_stack) "Flutter")}}
                             checked
                         {{/if}}>
 						<label class="form-check-label" for="Flutter">Flutter</label>
+					</div>
+					<div class="form-check col-lg-4">
+						<input class="form-check-input border shadow" type="checkbox" value="HTML" id="HTML" name="tech_stack"
+						{{#if (includes (splitTech project.tech_stack) "HTML")}}
+                            checked
+                        {{/if}}>
+						<label class="form-check-label" for="HTML">HTML</label>
+					</div>
+					<div class="form-check col-lg-4">
+						<input class="form-check-input border shadow" type="checkbox" value="CSS" id="CSS" name="tech_stack"
+						{{#if (includes (splitTech project.tech_stack) "CSS")}}
+                            checked
+                        {{/if}}>
+						<label class="form-check-label" for="CSS">CSS</label>
 					</div>
 					<div class="form-check col-lg-4">
 						<input class="form-check-input border shadow" type="checkbox" value="JavaScript" id="JavaScript" name="tech_stack"
@@ -96,6 +124,13 @@
                             checked
                         {{/if}}>
 						<label class="form-check-label" for="PHP">PHP</label>
+					</div>
+					<div class="form-check col-lg-4">
+						<input class="form-check-input border shadow" type="checkbox" value="Postman" id="Postman" name="tech_stack"
+						{{#if (includes (splitTech project.tech_stack) "Postman")}}
+                            checked
+                        {{/if}}>
+						<label class="form-check-label" for="Postman">Postman</label>
 					</div>
 					<div class="form-check col-lg-4">
 						<input class="form-check-input border shadow" type="checkbox" value="PostgreSQL" id="PostgreSQL" name="tech_stack"
